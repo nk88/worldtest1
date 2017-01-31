@@ -16,6 +16,7 @@
 
 	
 	function submitJson() {
+		document.querySelector("#li_result").innerHTML = "Loading...";
 		var oReq = new XMLHttpRequest();
 		oReq.addEventListener("load", reqListener);
 		oReq.open("POST", '/kbsearch/' + encodeURI(document.querySelector('#paramText').value) + '/');

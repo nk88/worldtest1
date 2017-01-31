@@ -1,6 +1,6 @@
 import pyodbc
 
-CONNECTION_STRING = 'DRIVER={SQL Server};SERVER=.;DATABASE=updShimon')
+CONNECTION_STRING = 'DRIVER={SQL Server};SERVER=.;DATABASE=updShimon'
 
 SEARCH_QUERY = """
 					SELECT TOP 100 [Id]
@@ -20,7 +20,7 @@ def exec_select(query, params):
     cursor = conn.cursor()
     
     cursor.execute(query, params)
-	all = []
+    all = []
     row = cursor.fetchone()
     while row:
         all.append(row)
