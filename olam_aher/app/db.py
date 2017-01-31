@@ -10,6 +10,7 @@ SEARCH_QUERY = """
 						  ,[FileUrl]
 						  ,[DownloadPath]
 						  ,[RetrievalDate]
+						  ,(Select COUNT(*) from [updShimon].[dbo].[EXTRACTED_FILES] e where e.DownloadedFileId = Id) ExtractedCount
 					  FROM [updShimon].[dbo].[DOWNLOADED_FILES]
 					  where FileName like '%%'+?+'%%'
 			 """
