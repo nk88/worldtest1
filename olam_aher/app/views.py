@@ -4,6 +4,7 @@ import urllib2
 import HTML
 import db
 from .forms import UrlForm
+import re
 
 @csrf_exempt
 def search_kb(request,id):
@@ -29,6 +30,7 @@ def get_page(request):
     response = urllib2.urlopen(url)
     content = response.read()
     source_content_type = response.info().get('content-type')
+    content = re.sub(r"\b(\d{7})\b",r"<b>\1</b>",content) #find numbers to mark
     return HttpResponse(content, content_type=source_content_type)
 
 
