@@ -8,9 +8,9 @@ import db
 def search_kb(request,id):
     results = db.search_file_name(id)
     colored_state = lambda state : HTML.TableCell(state, bgcolor='lime' if state == 'ProcessCompleted' else 'red')
-    table_data = [[row[0], row[1], colored_state(row[2]), row[3], HTML.link('Download', row[4]), \
-                 HTML.link('Open', 'file:///' + row[5].replace('\\','/')), "{:%B %d/%m/%y}".format(row[6])] for row in results]
-    htmlcode = HTML.table(table_data, header_row=['Id','File Name','State','Status','Url','Local Path','Retrieval Date'])	
+    table_data = [[row[0], row[1], colored_state(row[2]), row[7], row[3], HTML.link('Download', row[4]), \
+                 HTML.link('Open', 'file:///' + row[5].replace('\\','/')), "{:%d/%m/%y}".format(row[6])] for row in results]
+    htmlcode = HTML.table(table_data, header_row=['Id','File Name','State','#Extracted','Status','Url','Local Path','Retrieval Date'])	
     """
     table_data = [
         #[id,       'success'],
