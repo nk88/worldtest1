@@ -5,6 +5,7 @@
 <title>עולם אחר</title>
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static "css/view.css" %}" media="all">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 <body id="main_body" >
 	<script type="text/javascript">
@@ -24,10 +25,12 @@
 	}
 	
 	function getPage() {
-		var oReq = new XMLHttpRequest();
-		oReq.addEventListener("load", reqListener);
-		oReq.open("POST", '/getpage/');
-		oReq.send(document.querySelector('#paramText').value);
+		var url = '/getpage/';
+		var form = $('<form action="' + url + '" method="post">' +
+		  '<input type="text" name="url" value="' + document.querySelector('#paramText').value + '" />' +
+		  '</form>');
+		$('body').append(form);
+		form.submit();	
 	}
 
 	window.addEventListener('load', function(e) {

@@ -3,6 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 import urllib2
 import HTML
 import db
+from .forms import UrlForm
 
 @csrf_exempt
 def search_kb(request,id):
@@ -33,7 +34,12 @@ def search_kb(request,id):
 	
 @csrf_exempt
 def get_page(request):
-    url = request.body
-    content = urllib2.urlopen(url).read()
-    return HttpResponse(content)
+    form = UrlForm(request.POST)
+    if not form.is_valid():
+        raise Exception("invalid form")
+    url = form.cleaned_data['url']
+    response = urllib2.urlopen(url)
+    content = response.read()
+    source_content_type = response.info().get('content-type')
+    return HttpResponse(content, content_type=source_content_type)
 
