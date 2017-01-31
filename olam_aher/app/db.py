@@ -15,6 +15,12 @@ SEARCH_QUERY = """
 					  where FileName like '%%'+?+'%%'
 			 """
 
+EXTRACTED_QUERY = """
+					SELECT TOP 100 [ExtractedFilePath]
+					  FROM [updShimon].[dbo].[EXTRACTED_FILES]
+					  where DownloadedFileId = ?
+			 """
+
 
 def exec_select(query, params):
     conn = pyodbc.connect(CONNECTION_STRING)
@@ -31,3 +37,4 @@ def exec_select(query, params):
     return all
 
 search_file_name = lambda filename : exec_select(SEARCH_QUERY, filename)
+search_extracted = lambda id : exec_select(EXTRACTED_QUERY, id)
