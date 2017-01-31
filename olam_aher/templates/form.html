@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>עולם אחר</title>
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static "css/view.css" %}" media="all">
+</head>
+<body id="main_body" >
+	<script type="text/javascript">
+
+	function reqListener () {
+	  console.log(this.responseText);
+	  document.querySelector("#li_result").innerHTML = this.responseText;
+	}
+
+	
+	function submitJson() {
+		var oReq = new XMLHttpRequest();
+		oReq.addEventListener("load", reqListener);
+		oReq.open("POST", '/kbsearch/' + encodeURI(document.querySelector('#paramText').value) + '/');
+		oReq.send('');
+	}
+	
+	function getPage() {
+		var oReq = new XMLHttpRequest();
+		oReq.addEventListener("load", reqListener);
+		oReq.open("POST", '/getpage/');
+		oReq.send(document.querySelector('#paramText').value);
+	}
+
+	window.addEventListener('load', function(e) {
+	});
+	</script>
+	<div id="form_container">
+	
+		<h1><a>File search</a></h1>
+		<form id="form_1166740" class="appnitro"  method="post" action="/kbsearch/">				
+			<ul >
+			<li id="li_1" >
+		<label class="description" for="element_2">Search file </label>
+		<div>
+			<input id="paramText" class="element text" size="50" maxlength="50" value="" type="text">
+		</div> 
+		</li>
+		<li>
+		<a href="javascript:submitJson()"  >Search</a>		
+		</li>
+		<li>
+		<a href="javascript:getPage()"  >Get Page</a>		
+		</li>			
+						<li id="li_result" >
+						</li>
+			</ul>
+		</form>	
+	</div>
+	</body>
+</html>
