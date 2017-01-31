@@ -9,6 +9,9 @@ import re
 @csrf_exempt
 def search_kb(request,id):
     results = db.search_file_name(id)
+    if len(results) == 0:
+        htmlcode = HTML.table([[HTML.TableCell('Not Found', bgcolor='red')]])
+        return HttpResponse(htmlcode)
     colored_state = lambda state : HTML.TableCell(state, bgcolor='lime' if state == 'ProcessCompleted' else 'red')
     table_data = [[row[0], row[1], colored_state(row[2]), HTML.link(row[7],'search_extracted/'+str(row[0])+'/'), row[3], HTML.link('Download', row[4]), \
                  HTML.link('Open', 'file:///' + row[5].replace('\\','/')), "{:%d/%m/%y}".format(row[6])] for row in results]
