@@ -19,9 +19,22 @@
 	function reqListener () {
 	  console.log(this.responseText);
 	  document.querySelector("#li_result").innerHTML = this.responseText;
-	  tableToGrid($('table'));
+	  tableToGrid($('table.resultsTable:not(.ui-jqgrid-btable)'));
 	}
-
+	function reqListener1 () {
+	  console.log(this.responseText);
+	  document.querySelector("#li_result").innerHTML = '';
+	  document.querySelector("#li_before_result").innerHTML = this.responseText;
+	  $('.kbItem').each(function( index ) {
+		  console.log( index + ": " + $( this ).text() );
+		  kbInText($( this ).text());
+		});
+	}
+	function reqListener2 () {
+	  console.log(this.responseText);
+	  document.querySelector("#li_result").innerHTML += '<br/><hr/><br/>' + this.responseText;
+	  tableToGrid($('table.resultsTable:not(.ui-jqgrid-btable)'));
+	}
 	
 	function submitJson() {
 		document.querySelector("#li_result").innerHTML = "Loading...";
@@ -30,7 +43,22 @@
 		oReq.open("POST", '/kbsearch/' + encodeURI(document.querySelector('#paramText').value) + '/');
 		oReq.send('');
 	}
-	
+
+	function kbInText(id) {
+		var oReq = new XMLHttpRequest();
+		oReq.addEventListener("load", reqListener2);
+		oReq.open("POST", '/kbsearch/' +id.toString() + '/');
+		oReq.send('');
+	}
+
+	function submitJsonMultiple() {
+		document.querySelector("#li_result").innerHTML = "Loading...";
+		var oReq = new XMLHttpRequest();
+		oReq.addEventListener("load", reqListener1);
+		oReq.open("POST", '/multiple/');
+		oReq.send(document.querySelector('#paramText').value);
+	}
+
 	function getPage() {
 		var url = '/getpage/';
 		var form = $('<form action="' + url + '" method="post">' +
@@ -45,26 +73,31 @@
 	});
 	</script>
 	<div id="form_container">
-	
+
 		<h1><a>File search</a></h1>
-		<form id="form_1166740" class="appnitro"  method="post" action="/kbsearch/">				
+		<form id="form_1166740" class="appnitro"  method="post" action="/kbsearch/">
 			<ul >
 			<li id="li_1" >
 		<label class="description" for="element_2">Search file </label>
 		<div>
-			<input id="paramText" class="element text" style="width:500px" value="" type="text">
-		</div> 
+			<textarea id="paramText" class="element text" style="width:500px"></textarea>
+		</div>
 		</li>
 		<li>
-		<a href="javascript:submitJson()"  >Search</a>		
+		<a href="javascript:submitJson()"  >Search</a>
 		</li>
 		<li>
-		<a href="javascript:getPage()"  >Get Page</a>		
-		</li>			
-						<li id="li_result" >
-						</li>
+		<a href="javascript:submitJsonMultiple()"  >Search Multiple</a>
+		</li>
+				<li>
+		<a href="javascript:getPage()"  >Get Page</a>
+		</li>
+				<li id="li_before_result" >
+				</li>
+				<li id="li_result" >
+				</li>
 			</ul>
-		</form>	
+		</form>
 	</div>
 	</body>
 </html>

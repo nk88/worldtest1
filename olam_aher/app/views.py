@@ -16,7 +16,8 @@ def search_kb(request,id):
     colored_state = lambda state : '<span style="background-color: %s">%s</span>' % ('lime' if state == 'ProcessCompleted' else 'red', state)
     table_data = [[row[0], row[1], colored_state(row[2]), HTML.link(row[7],'search_extracted/'+str(row[0])+'/'), row[3], HTML.link('Download', row[4]), \
                  HTML.link('Open', 'file:///' + row[5].replace('\\','/')), "{:%d/%m/%y}".format(row[6])] for row in results]
-    htmlcode = HTML.table(table_data, header_row=['Id','File Name','State','#Extracted','Status','Url','Local Path','Retrieval Date'])	
+    htmlcode = HTML.table(table_data, header_row=['Id','File Name','State','#Extracted','Status','Url','Local Path','Retrieval Date'],attribs={'class': 'resultsTable'})
+    htmlcode = '<h3 id="tbl'+str(id)+'">'+str(id)+'</h3>'+htmlcode
     return HttpResponse(htmlcode)
 
 @csrf_exempt
@@ -26,7 +27,15 @@ def search_extracted(request,id):
     return HttpResponse('<br/>'.join(table_data))
 
 #TODO: search files including extracted
-#TODO: multiple search (find pattern in text area)
+
+@csrf_exempt
+def search_multiple_kb(request):
+    text = request.body
+    #text = re.sub(r"\b(\d{7})\b", r'<span style="background-color: lime; float: none">\1</span>', text)  # find numbers to mark
+    text = re.sub(r"\b(?:\()?(?:[kK][bB])?(\d{7})(?:\))?\b", r'<a id="kb\1" class="kbItem" href="#tbl\1">\1</a>', text)  # find numbers to mark
+    text = text.replace('\n','<BR/>')
+    return HttpResponse(text)
+
 
 @csrf_exempt
 def get_page(request):
